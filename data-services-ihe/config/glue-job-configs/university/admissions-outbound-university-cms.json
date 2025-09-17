@@ -1,0 +1,36 @@
+{
+  "jobConfig": {
+    "name": "admissions-outbound-university-cms",
+    "description": "Glue job for outbound University CMS admissions data transformation",
+    "assetFolderLocation": "resources/gluejobs/admissions/outbound/university_cms/",
+    "scriptName": "transformation.py",
+    "scriptLocationPrefix": "admissions-outbound-university-cms",
+    "schedule": {
+      "sand01": "cron(0 12 ? * * *)",
+      "dev01": "cron(0 12 ? * * *)",
+      "stage01": "cron(0 12 ? * * *)",
+      "prod01": "cron(0 12 ? * * *)"
+    },
+    "jobParameters": {
+      "--JobID": "admissions-outbound-university-cms",
+      "--ds_account_number": "{ds_account_number}",
+      "--is_account_number": "{is_account_number}",
+      "--additional-python-modules": "s3://{env_name}-data-artifacts-{ds_account_number}/assets/dependencies/data_transformer-requirements.txt,s3://{env_name}-data-artifacts-{ds_account_number}/assets/dependencies/data_transformer-0.0.1-py3-none-any.whl",
+      "--python-modules-installer-option": "-r",
+      "--conf": "spark.sql.catalog.my_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.my_catalog.warehouse=s3://{env_name}-data-artifacts-{ds_account_number}/pkh_applications/iceberg --conf spark.sql.catalog.my_catalog.catalog-impl=org.apache.iceberg.aws.glue.GlueCatalog --conf spark.sql.catalog.my_catalog.io-impl=org.apache.iceberg.aws.s3.S3FileIO --conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions",
+      "--datalake-formats": "iceberg",
+      "--env_name": "{env_name}",
+      "--tenant_code": "UNIVERSITY",
+      "--enable-metrics": true,
+      "--enable-spark-ui": true,
+      "--enable-continuous-cloudwatch-log": true,
+      "--enable-glue-datacatalog": true,
+      "--continuous-log-logGroup": "/aws-glue/jobs/admissions-outbound-university-cms",
+      "--spark-event-logs-path": "s3://{env_name}-data-artifacts-{ds_account_number}/output/logs/",
+      "--extra-py-files": "s3://{env_name}-data-artifacts-{ds_account_number}/assets/dependencies/library_package.zip",
+      "--pkh_data_process_period_in_hours": "12",
+      "--ihe_data_process_period_in_hours": "12"
+    },
+    "pythonPath": "s3://{env_name}-data-artifacts-{ds_account_number}/assets/dependencies/library_package.zip"
+  }
+}

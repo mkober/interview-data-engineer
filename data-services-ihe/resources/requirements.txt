@@ -1,0 +1,8 @@
+pydantic-core==2.10.0
+pydantic==2.4.0
+boto3
+pytest
+pyspark
+pylint
+requests>=2.32.4
+pluggy
